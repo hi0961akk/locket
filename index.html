@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tạo mã QR Hanpass</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 98%;
+      margin-bottom: 10px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 5px 8px;
+    }
+
+    .input-group input {
+  width: 100%;
+  padding: 0;
+  font-size: 48px;
+  font-weight: 500;
+  font-family: 'Arial', sans-serif;
+  text-align: right;
+  line-height: 1;
+  border: none;
+  border-bottom: 3px solid #ccc; /* Thêm gạch chân */
+  background-color: transparent;
+  margin: 0;
+  color: #2c3e50;
+  transition: faded 0.2s ease-in-out;
+}
+
+.input-group input:focus {
+  border-bottom: 3px solid #3498db; /* Gạch chân đổi màu khi focus */
+  outline: none;
+}
+
+    .currency-symbol {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      font-weight: 400;
+      color: #3366CC;
+    }
+
+    .amount-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .amount-btn {
+      padding: 5px 12px;
+      background-color: #ecf0f1;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      min-width: 60px;
+    }
+
+    .amount-btn:hover {
+      background-color: #d5dbdb;
+    }
+
+    .amount-btn.active {
+      background-color: #3498db;
+      color: white;
+    }
+
+    #generateQrBtn {
+      margin: 20px auto 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #3498db;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      position: relative;
+      transition: background-color 0.3s;
+      min-width: 150px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    #generateQrBtn.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #generateQrBtn:hover {
+      background-color: #2980b9;
+    }
+
+    #generateQrBtn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      background-color: #95a5a6;
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      right: 20px;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      height: 20px;
+      margin-top: 5px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .note {
+      font-size: 0.9em;
+      color: #7f8c8d;
+      text-align: left;
+      margin-top: 20px;
+      line-height: 1.4;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .note code {
+      background-color: #ecf0f1;
+      padding: 2px 5px;
+      border-radius: 3px;
+      display: inline-block;
+      word-break: break-word;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px);
+    }
+
+.modal-content {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 90vw;  /* Chiều rộng tối đa 80% khung nhìn */
+  max-height: 90vh; /* Chiều cao tối đa 80% khung nhìn */
+  width: 100%;
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: modalFadeIn 0.3s;
+}
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-content h2 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .modal-content img {
+      max-width: 256px;
+      height: auto;
+      margin: 0 auto 20px;
+      display: block;
+      border: 1px solid #eee;
+      padding: 10px;
+      background: white;
+    }
+
+    .modal-info {
+      font-size: 16px;
+      color: #34495e;
+      margin-bottom: 5px;
+      text-align: left;
+      padding: 8px 0;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .modal-info strong {
+      color: #2c3e50;
+    }
+
+    .modal-note {
+      font-size: 18px;
+      color: #7f8c8d;
+      text-align: left;
+      margin: 15px 0;
+      line-height: 1.5;
+    }
+
+    .modal-note br {
+      display: block;
+      content: "";
+      margin-bottom: 8px;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      font-weight: 600;
+    }
+
+    .modal-content button:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Tạo mã QR Hanpass</h1>
+    <p>Nhập số tiền để tạo mã QR:</p>
+
+    <div class="input-group">
+      <div class="input-wrapper">
+        <span class="currency-symbol">KRW</span>
+        <input type="text" id="numberInput" placeholder="1.000" autocomplete="off">
+      </div>
+      
+      <div class="amount-suggestions">
+        <button class="amount-btn" data-amount="10000">10.000</button>
+        <button class="amount-btn" data-amount="20000">20.000</button>
+        <button class="amount-btn" data-amount="50000">50.000</button>
+        <button class="amount-btn" data-amount="100000">100.000</button>
+        <button class="amount-btn" data-amount="200000">200.000</button>
+        <button class="amount-btn" data-amount="500000">500.000</button>
+      </div>
+      
+      <div id="errorMessage" class="error-message"></div>
+      <button id="generateQrBtn">
+        Tạo QR
+        <span class="loading-spinner" id="loadingSpinner"></span>
+      </button>
+    </div>
+
+    <p class="note">
+      Lưu ý: Nếu số nhỏ hơn 1.000 hoặc lớn hơn 2.000.000, mã QR sẽ được tạo với đoạn mã cố định:
+    </p>
+	<img style="max-width: 200px" src="https://www.hanpass.com/images/hanpass-logo-180x30-000-3x.png">
+  </div>
+
+  <div id="qrModal" class="modal">
+    <div class="modal-content">
+      <h2>Mã Thanh Toán</h2>
+      <img id="qrImage" src="" alt="QR Code">
+      <div id="qrRecipient" class="modal-info"><strong>Người nhận:</strong> AN THIEN NGO</div>
+      <div id="qrAmountDisplay" class="modal-info"><strong>Số tiền:</strong> </div>
+      <div class="modal-note">
+        <strong>Lưu ý:</strong><br>
+        1. Mở App HANPASS trên thiết bị<br>
+        2. Chọn mục "Chuyển tiền bằng QR"<br>
+        3. Tích chọn "Người nhận trực tiếp nhập số tiền"<br>
+        4. Bấm nút xác nhận và quét mã QR phía trên
+      </div>
+      <button onclick="closeModal()">Đóng</button>
+    </div>
+  </div>
+
+  <script>
+    const numberInput = document.getElementById('numberInput');
+    const generateQrBtn = document.getElementById('generateQrBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const qrModal = document.getElementById('qrModal');
+    const qrImage = document.getElementById('qrImage');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const qrRecipient = document.getElementById('qrRecipient');
+    const qrAmountDisplay = document.getElementById('qrAmountDisplay');
+    const amountBtns = document.querySelectorAll('.amount-btn');
+
+    const fixedCodeBase = 'hanpass::DSYM93758306::KRW::hanpass::1333392::HCH::AN%20THIEN%20NGO';
+    const recipientName = 'AN THIEN NGO';
+
+    function checkInputValue() {
+      let raw = numberInput.value.replace(/\./g, '').trim();
+      let number = parseInt(raw, 10);
+      
+      if (number >= 1000 && number <= 2000000) {
+        generateQrBtn.classList.add('active');
+        errorMessage.textContent = '';
+      } else {
+        generateQrBtn.classList.remove('active');
+        if (raw.length > 0) {
+          errorMessage.textContent = 'Vui lòng nhập số từ 1.000 đến 2.000.000';
+        } else {
+          errorMessage.textContent = '';
+        }
+      }
+    }
+
+    numberInput.addEventListener('input', () => {
+      let raw = numberInput.value.replace(/\D/g, '');
+      if (raw.length === 0) {
+        numberInput.value = '';
+        checkInputValue();
+        return;
+      }
+      if (raw.length > 7) raw = raw.slice(0, 7);
+      const formatted = new Intl.NumberFormat('kr-KR').format(raw);
+      numberInput.value = formatted;
+      checkInputValue();
+    });
+
+    amountBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const amount = btn.getAttribute('data-amount');
+        const formatted = new Intl.NumberFormat('kr-KR').format(amount);
+        numberInput.value = formatted;
+
+        amountBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        checkInputValue();
+        numberInput.focus();
+      });
+    });
+
+    generateQrBtn.addEventListener('click', () => {
+      errorMessage.textContent = '';
+      generateQrBtn.disabled = true;
+      loadingSpinner.style.display = 'block';
+      generateQrBtn.textContent = 'Đang tạo mã...';
+
+      let rawNumber = numberInput.value.replace(/\./g, '').trim();
+      let number = parseInt(rawNumber, 10);
+      let finalCode = fixedCodeBase;
+      let displayAmount = '';
+
+      if (!rawNumber || isNaN(number)) {
+        errorMessage.textContent = 'Vui lòng nhập số hợp lệ.';
+        resetLoading();
+        return;
+      } else if (number >= 1000 && number <= 2000000) {
+        finalCode = `${fixedCodeBase}::${number}`;
+        displayAmount = new Intl.NumberFormat('kr-KR').format(number) + ' KRW';
+      } else {
+        errorMessage.textContent = 'Giá trị ngoài khoảng 1.000 - 2.000.000.';
+      }
+
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(finalCode)}&size=256x256`;
+
+      const img = new Image();
+      img.onload = function() {
+        qrImage.src = qrUrl;
+        qrAmountDisplay.innerHTML = `<strong>Số tiền:</strong> ${displayAmount}`;
+        qrModal.style.display = 'flex';
+        resetLoading();
+      };
+      img.onerror = function() {
+        errorMessage.textContent = 'Không thể tải mã QR. Vui lòng thử lại.';
+        resetLoading();
+      };
+      img.src = qrUrl;
+    });
+
+    function resetLoading() {
+      generateQrBtn.disabled = false;
+      loadingSpinner.style.display = 'none';
+      generateQrBtn.textContent = 'Tạo QR';
+    }
+
+    function closeModal() {
+      qrModal.style.display = 'none';
+      qrImage.src = '';
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === qrModal) closeModal();
+    });
+
+    checkInputValue();
+  </script>
+</body>
+</html>
