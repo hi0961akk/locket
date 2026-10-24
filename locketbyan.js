@@ -14,7 +14,7 @@ if (ua.includes("Locket")) {
     obj.entries = obj.entries || {};
 
     // ============================================================
-    // 1. CẤU HÌNH GOLD, FEATURE GATES & PAYWALL (THEO BẢN DTH2927)
+    // 1. CẤU HÌNH GOLD, FEATURE GATES & PAYWALL
     // ============================================================
     Object.assign(obj.entries, {
         feature_gates: JSON.stringify({
