@@ -38,15 +38,10 @@ if (obj && obj.subscriber) {
     };
 
     const match = Object.keys(mapping).find(e => ua.includes(e));
-    if (match) {
-        let [e, s] = mapping[match];
-        s ? (locketGold.product_identifier = s, obj.subscriber.subscriptions[s] = locketGold) : (obj.subscriber.subscriptions["locket_1600_1y"] = locketGold, obj.subscriber.entitlements[e] = locketGold);
-    } else {
-        obj.subscriber.subscriptions["locket_1600_1y"] = locketGold;
-        obj.subscriber.entitlements.pro = locketGold;
-    }
-}
-
+if (match) {
+  let [e, s] = mapping[match];
+  s ? (locketGold.product_identifier = s, obj.subscriber.subscriptions[s] = anlocket) : obj.subscriber.subscriptions["locket_1600_1y"] = anlocket, obj.subscriber.entitlements[e] = locketGold
+} else obj.subscriber.subscriptions["locket_1600_1y"] = duyvinh09, obj.subscriber.entitlements.pro = locketGold;
 $done({
-    body: JSON.stringify(obj)
+  body: JSON.stringify(obj)
 });
