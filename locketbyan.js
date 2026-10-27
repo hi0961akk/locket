@@ -305,7 +305,7 @@ imageURL: "https://raw.githubusercontent.com/hi0961akk/locket/main/locketimg.png
         // Link sự kiện mới theo yêu cầu
         widget_frame_event: JSON.stringify({
             uid: "andeptrai",
-            url: "https://i.ibb.co/bRWxX6S1/45664603-203-E-4-AFB-A7-BC-1-C697-E7-E8231.png",
+            url: "https://i.ibb.co/M5xFd0Fv/IMG-0207.png",
             use_local_time_zone: true,
             placement: "below",
             start_at: "2020-01-01T00:00:00",
