@@ -459,6 +459,22 @@ imageURL: "https://raw.githubusercontent.com/hi0961akk/locket/main/locketimg.png
                             type: "static_content"
                         }
                     },
+                    
+{
+    overlay_id: "caption:tttvn",
+    source: "remote",
+    caption: {
+        background: {
+            colors: ["#FFB6C1", "#FF69B4", "#FF1493"]
+        },
+        icon: { data: "💩", type: "emoji" },
+        max_lines: 1,
+        text: "Thắm thum thủm",
+        text_color: "#8C1938",
+        type: "static_content"
+    }
+},
+
                     {
                         overlay_id: "caption:nho_anh_phien",
                         source: "remote",
