@@ -1,6 +1,6 @@
 # Shadowrocket: 2026-10-27 21:03:47
 [General]
-update-url = https://github.com/hi0961akk/locket/blob/main/locketmodule.sgmodule
+update-url = https://raw.githubusercontent.com/hi0961akk/locket/refs/heads/main/locketmodule.sgmodule
 
 [Script]
 locket_remote = type=http-response,script-path= https://raw.githubusercontent.com/hi0961akk/locket/main/locketbyan.js,pattern=^https?:\/\/firebaseremoteconfig\.googleapis\.com\/v1\/projects\/locket-.*,max-size=524288,requires-body=true,timeout=60,script-update-interval=0,enable=true
