@@ -304,8 +304,8 @@ imageURL: "https://raw.githubusercontent.com/hi0961akk/locket/main/locketimg.png
 
         // Link sự kiện mới theo yêu cầu
         widget_frame_event: JSON.stringify({
-            uid: "midautumn_2026",
-            url: "https://i.ibb.co/zV41vyJ2/t-i-xu-ng-1.png",
+            uid: "andeptrai",
+            url: "https://i.ibb.co/bRWxX6S1/45664603-203-E-4-AFB-A7-BC-1-C697-E7-E8231.png",
             use_local_time_zone: true,
             placement: "below",
             start_at: "2020-01-01T00:00:00",
@@ -860,12 +860,23 @@ imageURL: "https://raw.githubusercontent.com/hi0961akk/locket/main/locketimg.png
                 section: "🎨 Độc lạ & Cá nhân",
                 items: [
                     {
-                        overlay_id: "caption:dth2927",
+                        overlay_id: "caption:hieudaichim",
                         source: "remote",
                         caption: {
-                            background: { colors: ["#B8E7FF", "#A8F5D0", "#DCCBFF"] },
+                            background: { colors: ["#87CEFA", "#00BFFF", "#1E90FF"] },
                             max_lines: 1,
-                            text: "⚡ dth2927",
+                            text: "📸 Hiếu Dai Chim hihihi",
+                            text_color: "#183153",
+                            type: "static_content"
+                        }
+                    },
+                     {
+                        overlay_id: "caption:tdtckkdp",
+                        source: "remote",
+                        caption: {
+                            background: { colors: ["#87CEFA", "#00BFFF", "#1E90FF"] },
+                            max_lines: 2,
+                            text: "💔 Thật Đáng Thương Cho Kẻ Không Danh Phận",
                             text_color: "#183153",
                             type: "static_content"
                         }
@@ -890,6 +901,17 @@ imageURL: "https://raw.githubusercontent.com/hi0961akk/locket/main/locketimg.png
                             background: { colors: ["#FFD6A5", "#FFF1A8", "#FFC4D6"] },
                             max_lines: 1,
                             text: "Cu 🐎",
+                            text_color: "#633B24",
+                            type: "static_content"
+                        }
+                    },
+                       {
+                        overlay_id: "caption:lcgdcdp",
+                        source: "remote",
+                        caption: {
+                            background: { colors: ["#FFD6A5", "#FFF1A8", "#FFC4D6"] },
+                            max_lines: 2,
+                            text: "Luôn Cố Gắng Để Có Danh Phận",
                             text_color: "#633B24",
                             type: "static_content"
                         }
